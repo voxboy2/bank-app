@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { EmailsService } from './emails.service';
 import { EmailsController } from './emails.controller';
 import { ConfigModule } from '@nestjs/config';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/apis/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
 import { TypeOrmModule } from '@nestjs/typeorm';

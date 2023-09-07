@@ -3,14 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './apis/users/users.module';
 import { User  } from './entities/index'
-import { Wallet } from './wallets/wallet.entity';
-import { WalletsModule } from './wallets/wallets.module';
+import { Wallet } from './apis/wallets/wallet.entity';
+import { WalletsModule } from './apis/wallets/wallets.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TransactionsModule } from './transactions/transactions.module';
-import { VirtualAccountsModule } from './virtual-accounts/virtual-accounts.module';
-import { EmailsModule } from './emails/emails.module';
+import { TransactionsModule } from './apis/transactions/transactions.module';
+import { VirtualAccountsModule } from './apis/virtual-accounts/virtual-accounts.module';
+import { EmailsModule } from './apis/emails/emails.module';
 import { CronJobsModule } from './cron-jobs/cron-jobs.module';
 import * as Joi from 'joi';
 
@@ -30,14 +30,11 @@ import * as Joi from 'joi';
       useFactory: (config: ConfigService) => {
         return {
           type: 'mysql',
-          // JWT_VERIFICATION_TOKEN_SECRET: config.get<string>('JWT_VERIFICATION_TOKEN_SECRET'),
-          // JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: config.get<string>('JWT_VERIFICATION_TOKEN_EXPIRATION_TIME'),
-          // EMAIL_CONFIRMATION_URL : config.get<string>('EMAIL_CONFIRMATION_URL'),
-          database: 'bank_app',
+          database: config.get<string>('DB_NAME'),
           port: 8889,
-          username: 'root',
-          password: 'root',
-          host: 'localhost',
+          username: config.get<string>('DB_USER_NAME'),
+          password: config.get<string>('DB_PASSWORD'),
+          host: config.get<string>('DB_HOST'),
           synchronize: true,
           entities: [User, Wallet],
         };

@@ -4,7 +4,7 @@ import * as Mail from 'nodemailer/lib/mailer';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import VerificationTokenPayload from './email-vtp-interface';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/apis/users/users.service';
 import { User } from 'src/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -84,8 +84,9 @@ export class EmailsService {
     }
   }
 
-  public async resendConfirmationLink(userId: number) {
-    const user = await this.usersService.findOne(userId);
+  public async resendConfirmationLink(id: number) {
+    const user = await this.usersService.findOne(id);
+
     if (user.email_verified) {
       throw new BadRequestException('Email already confirmed');
     }

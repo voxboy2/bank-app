@@ -20,7 +20,8 @@ import { UserDto } from './dtos/user.dto';
 import { serialize } from 'src/interceptors/serialize.interceptor';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from './decorators/current-user.decorators';
-import { EmailsService } from 'src/emails/emails.service';
+import { EmailsService } from 'src/apis/emails/emails.service';
+import { LoginUserDto } from './dtos/login-user.dto';
 
 @Controller('auth')
 @serialize(UserDto)
@@ -60,9 +61,10 @@ export class UsersController {
   }
 
   @Post('/signin')
-  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+  async signin(@Body() body: LoginUserDto, @Session() session: any) {
     const user = await this.authservice.signin(body.email, body.password);
     session.userId = user.id;
+
 
     return user;
   }

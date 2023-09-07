@@ -1,5 +1,5 @@
-import { Transaction } from 'src/transactions/transaction.entity';
-import { Virtual_Account } from 'src/virtual-accounts/virtual-accounts.entity';
+import { Transaction } from 'src/apis/transactions/transaction.entity';
+import { Virtual_Account } from 'src/apis/virtual-accounts/virtual-accounts.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Wallet } from '../wallets/wallet.entity';
 

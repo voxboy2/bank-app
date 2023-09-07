@@ -4,13 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { WalletsService } from 'src/wallets/wallets.service';
+import { WalletsService } from 'src/apis/wallets/wallets.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { EmailsService } from 'src/emails/emails.service';
+import { EmailsService } from 'src/apis/emails/emails.service';
 
 const scrypt = promisify(_scrypt);
 
@@ -93,8 +93,5 @@ export class AuthService {
 
     return user;
   }
-
-
-
 
 }

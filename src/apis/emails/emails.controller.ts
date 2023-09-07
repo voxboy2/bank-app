@@ -3,11 +3,14 @@ import {
   Post,
   Body,
   Req,
+  UseGuards
 } from '@nestjs/common';
 import ConfirmEmailDto from './dto/confirm-email.dto';
 import { User } from 'src/entities';
 import { Request } from 'express';
 import { EmailsService } from './emails.service';
+import { CurrentUser } from '../users/decorators/current-user.decorators';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 interface RequestWithUser extends Request {
   user: User;
@@ -28,8 +31,12 @@ export class EmailsController {
     await this.emailsService.confirmEmail(email);
   }
 
-  @Post('resend-confirmation-link')
-  async resendConfirmationLink(@Req() request: RequestWithUser) {
-    await this.emailsService.resendConfirmationLink(request.user.id);
+
+  
+ @UseGuards(AuthGuard)
+ @Post('resend-confirmation-link')
+  async resendConfirmationLink(@CurrentUser() user: User) {
+    console.log(CurrentUser);
+    await this.emailsService.resendConfirmationLink(user.id);
   }
 }
