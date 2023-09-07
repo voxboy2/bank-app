@@ -1,3 +1,3 @@
-import { User } from 'src/users/user.entity';
+import { User } from 'src/apis/users/user.entity';
 
 export { User };
