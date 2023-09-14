@@ -1,34 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Res, Req, UseGuards } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { response, Response } from 'express';
+import * as path from 'path';
+import { CurrentUser } from '../users/decorators/current-user.decorators';
+import { User } from 'src/entities';
 
 @Controller('transactions')
 export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+  constructor(private transactionsService: TransactionsService) {}
 
-  @Post()
-  create(@Body() createTransactionDto: CreateTransactionDto) {
-    return this.transactionsService.create(createTransactionDto);
+  @Get('/pay')
+  async servePayPage(@Res() res: Response) {
+    res.sendFile(path.join(__dirname, '../../../index.html'));
   }
+  @Post('/webhook-response')
+  async verifyTransactionStatus(@Req() req: Request, @Res() res: Response) {
 
-  @Get()
-  findAll() {
-    return this.transactionsService.findAll();
-  }
+    // await this.transactionsService.verifyPaystackWebhook(
+    //   req,
+    //   res,
+    // );
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTransactionDto: UpdateTransactionDto) {
-    return this.transactionsService.update(+id, updateTransactionDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.transactionsService.remove(+id);
+    const webhook = await this.transactionsService.processPaystackWebhook(
+      req,
+      res,
+    );
+    return webhook;
   }
 }

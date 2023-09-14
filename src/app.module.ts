@@ -13,6 +13,10 @@ import { VirtualAccountsModule } from './apis/virtual-accounts/virtual-accounts.
 import { EmailsModule } from './apis/emails/emails.module';
 import { CronJobsModule } from './cron-jobs/cron-jobs.module';
 import * as Joi from 'joi';
+import { Wallet_Transaction } from './apis/wallets/wallet-transaction.entity';
+import { Virtual_Account } from './apis/virtual-accounts/virtual-accounts.entity';
+import { Transaction } from './apis/transactions/transaction.entity';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -36,7 +40,7 @@ import * as Joi from 'joi';
           password: config.get<string>('DB_PASSWORD'),
           host: config.get<string>('DB_HOST'),
           synchronize: true,
-          entities: [User, Wallet],
+          entities: [User, Wallet, Transaction, Wallet_Transaction, Virtual_Account],
         };
       },
     }),
@@ -47,6 +51,10 @@ import * as Joi from 'joi';
     VirtualAccountsModule,
     EmailsModule,
     CronJobsModule,
+    TransactionsModule,
+    Wallet_Transaction,
+    VirtualAccountsModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

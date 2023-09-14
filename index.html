@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Receive Payment</title>
+  </head>
+  <body>
+    <!-- <form>
+      <script src="https://checkout.flutterwave.com/v3.js"></script>
+      <button type="button" onClick="makePayment()">Pay Now</button>
+    </form> -->
+
+    <form id="paymentForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email-address"
+          value="efewebdev@gmail.com"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <input type="tel" id="amount" value="1000" required />
+      </div>
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" value="efe" />
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" value="Ebieroma" />
+      </div>
+      <div class="form-group">
+        <label for="reference">Reference</label>
+        <input type="tel" id="reference" value="" required />
+      </div>
+      <div class="form-submit">
+        <button type="submit" onclick="payWithPaystack()">Pay</button>
+      </div>
+    </form>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+
+    <script>
+      const paymentForm = document.getElementById('paymentForm');
+      paymentForm.addEventListener('submit', payWithPaystack, false);
+
+      function payWithPaystack(e) {
+        e.preventDefault();
+
+        let handler = PaystackPop.setup({
+          key: 'pk_test_4a98a2cbe2d6cf446fd2962edf3c19e4dc553f05', // Replace with your public key
+          email: document.getElementById('email-address').value,
+          metadata: {
+            first_name: document.getElementById('first-name').value,
+            last_name: document.getElementById('last-name').value,
+          },
+          amount: document.getElementById('amount').value * 100,
+          ref: document.getElementById('reference').value,
+
+          onClose: function () {
+            alert('Window closed.');
+          },
+          callback: function (response) {
+            let message = 'Payment complete! Reference: ' + response.reference;
+            alert(message);
+          },
+        });
+
+        handler.openIframe();
+      }
+    </script>
+  </body>
+</html>

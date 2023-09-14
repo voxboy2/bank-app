@@ -11,11 +11,13 @@ export class Wallet {
    @Column({ default: 0 })
    balance: number;
 
-   @Column({ default: 'USD'})
+   @Column({ default: 'NGN'})
    currency: string;
 
-   @ManyToOne(() => User, user => user.wallets)
-   @JoinColumn({ name: 'user_id' })
-   user_id: User;
+   // @Column()
+   // user_id: number;
 
+   @ManyToOne(() => User, user => user.wallet)
+   @JoinColumn({ name: 'user_id' })
+   user_id : User;
 }
