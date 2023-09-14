@@ -12,9 +12,7 @@ import { EmailsService } from './emails.service';
 import { CurrentUser } from '../users/decorators/current-user.decorators';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-interface RequestWithUser extends Request {
-  user: User;
-}
+
 
 @Controller('emails')
 export class EmailsController {
@@ -32,11 +30,9 @@ export class EmailsController {
   }
 
 
-  
  @UseGuards(AuthGuard)
  @Post('resend-confirmation-link')
   async resendConfirmationLink(@CurrentUser() user: User) {
-    console.log(CurrentUser);
     await this.emailsService.resendConfirmationLink(user.id);
   }
 }

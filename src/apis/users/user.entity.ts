@@ -20,17 +20,17 @@ export class User {
   @Column()
   password: string;
 
-  // @Column(() => Transaction, (transaction => transaction.user_id)
-  // transactions: Transaction[];
+  @OneToMany(() => Transaction, (transaction) => transaction.user_id)
+  transactions: Transaction[];
 
   
-  // @Column(() => Virtual_Account, (virtual_account) => virtual_account.user_id)
-  // virtual_account: VirtualAccount[];
+  @OneToMany(() => Virtual_Account, (virtual_account) => virtual_account.user_id)
+  virtual_account: Virtual_Account[];
 
   @Column({ default : false })
   email_verified: boolean
 
 
   @OneToMany(() => Wallet, (wallet) => wallet.user_id)
-  wallets: Wallet[];
+  wallet: Wallet[];
 }

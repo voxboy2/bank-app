@@ -4,6 +4,7 @@ import { WalletsController } from './wallets.controller';
 import { Wallet } from './wallet.entity';
 import { User } from 'src/entities';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmailsService } from '../emails/emails.service';
 
 
 @Module({

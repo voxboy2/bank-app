@@ -1,11 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Body, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { useContainer } from 'class-validator';
 import { User } from 'src/entities';
-import { Repository } from 'typeorm';
+import {
+  DeepPartial,
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
-import { Wallet } from './wallet.entity';
 
+import { Wallet } from './wallet.entity';
 @Injectable()
 export class WalletsService {
   constructor(
@@ -13,16 +19,17 @@ export class WalletsService {
     @InjectRepository(Wallet) private wallet: Repository<Wallet>,
   ) {}
 
-  async create(body: any, user_id: any) {
-    const wallet = await this.wallet.create({
-      user_id: user_id,
+  async create(user: any) : Promise<Wallet> {
+
+    let wallet =  await this.wallet.create({
+      balance : 0,
+      currency: "NGN",
+      user_id: user
     });
 
-    await this.wallet.save(wallet);
+    console.log(wallet);
 
-  
-
-    return wallet;
+    return await this.wallet.save(wallet);
   }
 
   findAll() {

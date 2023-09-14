@@ -22,14 +22,17 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from './decorators/current-user.decorators';
 import { EmailsService } from 'src/apis/emails/emails.service';
 import { LoginUserDto } from './dtos/login-user.dto';
+import { WalletsService } from '../wallets/wallets.service';
 
 @Controller('auth')
 @serialize(UserDto)
 export class UsersController {
   constructor(
     private usersService: UsersService,
+    private walletsService: WalletsService,
     private authservice: AuthService,
-    private emailsService: EmailsService
+    private emailsService: EmailsService,
+
   ) {}
 
   @Get('/whoami')
@@ -55,7 +58,7 @@ export class UsersController {
 
     if(user.email_verified == false){
       await this.emailsService.sendVerificationLink(body.email)
-    }
+    }    
 
     return user;
   }

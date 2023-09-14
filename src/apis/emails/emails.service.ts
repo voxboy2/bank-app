@@ -8,6 +8,8 @@ import { UsersService } from 'src/apis/users/users.service';
 import { User } from 'src/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { WalletsService } from '../wallets/wallets.service';
+import { Wallet } from '../wallets/wallet.entity';
 
 @Injectable()
 export class EmailsService {
@@ -16,7 +18,9 @@ export class EmailsService {
   constructor(
     private readonly jwtService: JwtService,
     private usersService: UsersService,
+    private walletsService : WalletsService,
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Wallet) private wallet : Repository<Wallet>,
     private configService: ConfigService,
   ) {
     this.nodemailerTransport = createTransport({
@@ -60,10 +64,14 @@ export class EmailsService {
       throw new BadRequestException('Email already confirmed');
     }
     await this.markEmailAsConfirmed(email);
+    
+    await this.walletsService.create(user.id)
+
+
   }
 
   async markEmailAsConfirmed(email: string) {
-    await this.userRepository.update({ email }, { email_verified: true });
+   await this.userRepository.update({ email }, { email_verified: true });  
   }
 
   public async decodeConfirmationToken(token: string) {
@@ -77,7 +85,7 @@ export class EmailsService {
       }
       throw new BadRequestException();
     } catch (error) {
-      if (error?.name === 'TokenExpiredError') {
+      if (error === 'TokenExpiredError') {
         throw new BadRequestException('Email confirmation token expired');
       }
       throw new BadRequestException('Bad confirmation token');

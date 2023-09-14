@@ -1,4 +1,5 @@
-import { IsEmail, IsString, IsOptional, IsNumber } from 'class-validator';
+import { Expose, Transform } from 'class-transformer';
+import { IsString, IsNumber } from 'class-validator';
 
 export class CreateWalletDto {
   @IsNumber()
@@ -6,4 +7,8 @@ export class CreateWalletDto {
 
   @IsString()
   currency: string;
+
+  @Transform(({ obj }) => obj.user.id)
+  @Expose()
+  user_id: number;
 }

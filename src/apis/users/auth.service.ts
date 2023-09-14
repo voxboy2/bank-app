@@ -8,9 +8,11 @@ import { WalletsService } from 'src/apis/wallets/wallets.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { EmailsService } from 'src/apis/emails/emails.service';
+import { Wallet } from '../wallets/wallet.entity';
+import { CreateWalletDto } from '../wallets/dto/create-wallet.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -19,8 +21,11 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     @InjectRepository(User) private user: Repository<User>,
+    @InjectRepository(Wallet) private wallet: Repository<Wallet>,
+
     private walletsService: WalletsService,
-    private emailsService: EmailsService
+
+    private emailsService: EmailsService,
   ) {}
 
   async signup(
@@ -35,8 +40,6 @@ export class AuthService {
     if (users.length) {
       throw new BadRequestException('email in use');
     }
-
-   
 
     // generate a salt
     const salt = randomBytes(8).toString('hex');
@@ -55,28 +58,17 @@ export class AuthService {
       result,
     );
 
-
     if (!user) {
       throw new BadRequestException("Unable to save user's data");
     }
 
-     
-    if (user) {
-      await this.user.save(user);
-    }
+    await this.user.save(user);
 
-
-    let wallets;
-    if (!wallets) {
-      await this.walletsService.create(wallets, user.id)
-    }
 
     return user;
   }
 
-
   async signin(email: string, password: string) {
-    
     const [user] = await this.usersService.find(email);
 
     if (!user) {
@@ -93,5 +85,4 @@ export class AuthService {
 
     return user;
   }
-
 }
