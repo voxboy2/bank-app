@@ -1,5 +1,4 @@
-import { Transaction } from 'src/apis/transactions/transaction.entity';
-import { Virtual_Account } from 'src/apis/virtual-accounts/virtual-accounts.entity';
+import { Inflow } from 'src/apis/inflows/inflow.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Wallet } from '../wallets/wallet.entity';
 
@@ -20,12 +19,9 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.user_id)
-  transactions: Transaction[];
+  @OneToMany(() => Inflow, (inflow) => inflow.user_id)
+  inflows: Inflow[];
 
-  
-  @OneToMany(() => Virtual_Account, (virtual_account) => virtual_account.user_id)
-  virtual_account: Virtual_Account[];
 
   @Column({ default : false })
   email_verified: boolean

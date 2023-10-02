@@ -4,18 +4,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './apis/users/users.module';
-import { User  } from './entities/index'
+import { User } from './entities/index';
 import { Wallet } from './apis/wallets/wallet.entity';
 import { WalletsModule } from './apis/wallets/wallets.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TransactionsModule } from './apis/transactions/transactions.module';
-import { VirtualAccountsModule } from './apis/virtual-accounts/virtual-accounts.module';
+import { InflowsModule } from './apis/inflows/inflows.module';
 import { EmailsModule } from './apis/emails/emails.module';
 import { CronJobsModule } from './cron-jobs/cron-jobs.module';
 import * as Joi from 'joi';
 import { Wallet_Transaction } from './apis/wallets/wallet-transaction.entity';
-import { Virtual_Account } from './apis/virtual-accounts/virtual-accounts.entity';
-import { Transaction } from './apis/transactions/transaction.entity';
+import { Inflow } from './apis/inflows/inflow.entity';
 import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
@@ -40,20 +38,17 @@ import { WebhooksModule } from './webhooks/webhooks.module';
           password: config.get<string>('DB_PASSWORD'),
           host: config.get<string>('DB_HOST'),
           synchronize: true,
-          entities: [User, Wallet, Transaction, Wallet_Transaction, Virtual_Account],
+          entities: [User, Wallet, Inflow, Wallet_Transaction],
         };
       },
     }),
     ScheduleModule.forRoot(),
     UsersModule,
     WalletsModule,
-    TransactionsModule,
-    VirtualAccountsModule,
     EmailsModule,
     CronJobsModule,
-    TransactionsModule,
+    InflowsModule,
     Wallet_Transaction,
-    VirtualAccountsModule,
     WebhooksModule,
   ],
   controllers: [AppController],

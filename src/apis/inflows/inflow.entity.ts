@@ -12,11 +12,11 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Transaction {
+export class Inflow {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.transactions)
+  @ManyToOne(() => User, (user) => user.inflows)
   @JoinColumn({ name: 'user_id' })
   user_id: User;
 

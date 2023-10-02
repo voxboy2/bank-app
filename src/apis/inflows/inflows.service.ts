@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Wallet_Transaction } from '../wallets/wallet-transaction.entity';
 import { Wallet } from '../wallets/wallet.entity';
-import { Transaction } from './transaction.entity';
+import { Inflow } from './inflow.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
@@ -18,13 +18,13 @@ import {
 import * as crypto from 'crypto';
 
 @Injectable()
-export class TransactionsService {
+export class InflowsService {
   constructor(
     @InjectRepository(Wallet) private wallet: Repository<Wallet>,
     @InjectRepository(User) private repo: Repository<User>,
     @InjectRepository(Wallet_Transaction)
     private wallet_transaction: Repository<Wallet_Transaction>,
-    @InjectRepository(Transaction) private transaction: Repository<Transaction>,
+    @InjectRepository(Inflow) private inflow: Repository<Inflow>,
   ) {}
 
   async validateUserWallet(user_id: any) {
@@ -52,17 +52,19 @@ export class TransactionsService {
   //   res.send(200);
   // }
 
+
+
   async processPaystackWebhook(req: any, res: any) {
     const webhook = req.body;
 
-    const transactionExist = await this.transaction.findOne({
+    const inflowExist = await this.inflow.findOne({
       where: { reference: webhook?.data?.reference },
     });
 
-    console.log(transactionExist, 'hello');
+    console.log(inflowExist, 'hello');
 
-    if (transactionExist) {
-      throw new ConflictException('Transaction Already Exist');
+    if (inflowExist) {
+      throw new ConflictException('Inflow Already Exist');
     }
 
     const user = await this.repo.findOne({
@@ -86,7 +88,7 @@ export class TransactionsService {
     let name = `${firstName} ${lastName}`;
 
     if (name) {
-      await this.createTransaction(
+      await this.createInflow(
         user,
         webhook?.data.reference,
         webhook?.data.status,
@@ -114,6 +116,7 @@ export class TransactionsService {
     throw error;
   }
 
+
   async createWalletTransaction(
     user_id: number,
     payment_status: any,
@@ -137,7 +140,7 @@ export class TransactionsService {
     }
   }
 
-  async createTransaction(
+  async createInflow(
     user_id: User,
     id: any,
     payment_status: any,
@@ -150,7 +153,7 @@ export class TransactionsService {
     payment_provider: Payment_Provider.PAYSTACK,
   ) {
     try {
-      const Transaction = this.transaction.create({
+      const Inflow = this.inflow.create({
         user_id,
         reference: id,
         payment_status: payment_status,
@@ -162,7 +165,7 @@ export class TransactionsService {
         phone,
         payment_provider: payment_provider,
       });
-      return this.transaction.save(Transaction);
+      return this.inflow.save(Inflow);
     } catch (error) {}
   }
 

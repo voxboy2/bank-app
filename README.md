@@ -6,7 +6,7 @@ Key components of our banking system include:
 
 - Users: Users can be identified using  their Ids, names, email addresses.
 
-- Wallets: Users have virtual wallets associated with their accounts, they get this virtual wallet when they verify their email after registartion. When they receieve payments it is credited to their wallets. These wallets store the user's balance. 
+- Wallets: Users have wallets to receive payments. When they receieve payments it is credited to their wallets. These wallets store the user's balance. 
 
 - Transactions : Users can initiate multiple transactions, allowing them to receive money within the system.
 
