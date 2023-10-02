@@ -10,10 +10,10 @@ import { WalletsService } from 'src/apis/wallets/wallets.service';
 import { Wallet } from 'src/apis/wallets/wallet.entity';
 import { EmailsService } from 'src/apis/emails/emails.service';
 import { JwtService } from '@nestjs/jwt';
-import { Transaction } from '../transactions/transaction.entity';
+import { Inflow } from '../pay-ins/inflow.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Wallet, Transaction])],
+  imports: [TypeOrmModule.forFeature([User, Wallet, Inflow])],
   controllers: [UsersController],
   providers: [
     EmailsService,
