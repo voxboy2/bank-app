@@ -8,14 +8,12 @@ import { User } from './entities/index';
 import { Wallet } from './apis/wallets/wallet.entity';
 import { WalletsModule } from './apis/wallets/wallets.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { InflowsModule } from './apis/pay-ins/inflows.module';
-import { VirtualAccountsModule } from './apis/virtual-accounts/virtual-accounts.module';
+import { InflowsModule } from './apis/inflows/inflows.module';
 import { EmailsModule } from './apis/emails/emails.module';
 import { CronJobsModule } from './cron-jobs/cron-jobs.module';
 import * as Joi from 'joi';
 import { Wallet_Transaction } from './apis/wallets/wallet-transaction.entity';
-import { Virtual_Account } from './apis/virtual-accounts/virtual-accounts.entity';
-import { Inflow } from './apis/pay-ins/inflow.entity';
+import { Inflow } from './apis/inflows/inflow.entity';
 import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
@@ -40,19 +38,17 @@ import { WebhooksModule } from './webhooks/webhooks.module';
           password: config.get<string>('DB_PASSWORD'),
           host: config.get<string>('DB_HOST'),
           synchronize: true,
-          entities: [User, Wallet, Inflow, Wallet_Transaction, Virtual_Account],
+          entities: [User, Wallet, Inflow, Wallet_Transaction],
         };
       },
     }),
     ScheduleModule.forRoot(),
     UsersModule,
     WalletsModule,
-    VirtualAccountsModule,
     EmailsModule,
     CronJobsModule,
     InflowsModule,
     Wallet_Transaction,
-    VirtualAccountsModule,
     WebhooksModule,
   ],
   controllers: [AppController],
